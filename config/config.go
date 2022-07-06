@@ -1,48 +1,53 @@
 package config
 
 import (
-	jww "github.com/spf13/jwalterweatherman"
 	"github.com/spf13/viper"
 )
 
 var (
-	Cfg  *Config
-	Env *EnvConfig
+	Cfg *Config
 )
 
 type Config struct {
 	// List of addresses that the server will listen to
 	Addresses []string
+	v         *viper.Viper
 }
 
-type EnvConfig struct {
-	DSN string
+// create new Config
+func New() *Config {
+	c := &Config{
+		Addresses: []string{":1883"},
+		v:         viper.New(),
+	}
+
+	c.v.SetConfigType("yaml")
+
+	return c
 }
 
-func LoadEnv(path string) {
-
-}
-
+// find and load config from given paths
 func LoadConfig(paths ...string) error {
-	Cfg = &Config{}
-	c := viper.New()
+	Cfg = New()
 
+	if err := Cfg.LoadConfig(paths...); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (c *Config) LoadConfig(paths ...string) error {
 	for _, p := range paths {
-		c.AddConfigPath(p)
+		c.v.AddConfigPath(p)
 	}
 
-	c.SetConfigType("yaml")
-	
-	c.SetDefault("addresses", []string{":1883"})
-
-	if err := c.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			jww.FATAL.Fatal(err)
-		}
+	if err := c.v.ReadInConfig(); err != nil {
+		return err
 	}
 
-	if err := c.Unmarshal(Cfg); err != nil {
-		jww.ERROR.Fatal(err)
+	if err := c.v.Unmarshal(c); err != nil {
+		return err
 	}
 
 	return nil
