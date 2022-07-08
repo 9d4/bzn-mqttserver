@@ -8,6 +8,10 @@ var (
 	Cfg *Config
 )
 
+func init() {
+	Cfg = New()
+}
+
 type Config struct {
 	// List of addresses that the server will listen to
 	Addresses []string
@@ -28,8 +32,6 @@ func New() *Config {
 
 // find and load config from given paths
 func LoadConfig(paths ...string) error {
-	Cfg = New()
-
 	if err := Cfg.LoadConfig(paths...); err != nil {
 		return err
 	}
