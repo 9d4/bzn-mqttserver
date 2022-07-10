@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
-	"mqttserver/config"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/9d4/bzn-mqttserver/config"
 
 	mqtt "github.com/mochi-co/mqtt/server"
 	"github.com/mochi-co/mqtt/server/listeners"

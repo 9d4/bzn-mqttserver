@@ -1,4 +1,4 @@
-module mqttserver
+module github.com/9d4/bzn-mqttserver
 
 go 1.18
 
