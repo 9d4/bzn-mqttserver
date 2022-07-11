@@ -45,7 +45,7 @@ func main() {
 		done <- true
 	}()
 
-	fmt.Println(("MQTT Server initializing..."))
+	fmt.Println("MQTT Server initializing...")
 
 	server := mqtt.NewServer(nil)
 
