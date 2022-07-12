@@ -11,29 +11,15 @@ import (
 
 	mqtt "github.com/mochi-co/mqtt/server"
 	"github.com/mochi-co/mqtt/server/listeners"
-	jww "github.com/spf13/jwalterweatherman"
-	"github.com/spf13/viper"
 )
 
 var (
-	EnvConfig *viper.Viper
-
 	MQTTServer *mqtt.Server
 )
 
 func init() {
-	EnvConfig = viper.New()
-	EnvConfig.AddConfigPath(".")
-	EnvConfig.SetConfigName(".env")
-	EnvConfig.SetConfigType("env")
-	EnvConfig.AutomaticEnv()
-
-	// load ENV
-	if err := EnvConfig.ReadInConfig(); err != nil {
-		jww.ERROR.Fatal(err)
-	}
-
 	config.LoadConfig(".")
+	config.LoadEnv()
 }
 
 func main() {
